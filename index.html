@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three body problem simulation</title>
+    <style>
+         body{
+            box-sizing: border-box;
+            margin: 0%;
+            padding: 0%;
+            width: 100vw;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            background-color: rgb(0, 0, 0);
+            background-image: linear-gradient(to left bottom , rgba(255, 255, 255, 0.966),rgb(151, 151, 151));
+            font-family: 'montserrat';
+            font-weight: 800;
+        }
+        .p5Canvas{
+           
+            background-color: black;
+            border: rgb(206, 206, 206);
+        }
+        .controls{
+            position: absolute;
+            z-index: 100;
+            color: white;
+            width: fit-content;
+            height:fit-content;
+            background-color: rgba(75, 75, 75, 0.247);
+            top:0;
+            left:0;
+
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            transform: translate(0,-100%);
+
+            padding: 1rem;
+
+            transition: 2s ease-in-out;
+            backdrop-filter: blur(10px);
+
+            box-shadow: inset -2px -2px 8px rgba(255, 255, 255, 0.164);
+
+
+
+
+        }
+        
+      
+        .controls.open{
+            transform: translate(0,-1.5rem);
+        }
+
+        .controls h3{
+            font-weight: 500;
+        }
+        .point{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-weight: 500;
+          
+        }
+        .point input{
+            padding: 0.2rem;
+            background-color: rgba(65, 65, 65, 0.733);
+            color: WHITE;
+            border: none;
+            outline: none;
+        }
+        .point .clr{
+            height: 15px;
+            width: 4px;
+        }
+        .point .clr1{
+            background-color: red;
+        }
+        .point .clr2{
+            background-color: greenyellow;
+        }
+        .point .clr3{
+            background-color: rgb(52, 52, 255);
+        }
+        .run{
+            width: fit-content;
+            display: grid;
+            place-items: center;
+            padding: 1rem 3rem;
+            margin: 0 1rem ;
+            margin-top: 1rem;
+        
+            background-color: rgb(255, 40, 40);
+            border-radius: 0.5rem;
+
+            cursor: pointer;
+        }
+        .run:hover{
+            --c:rgba(255, 0, 0, 0.178);
+            box-shadow:2px 2px 10px var(--c),2px -2px 10px var(--c),-2px 2px 10px var(--c) , -2px -2px 10px var(--c) ;
+        }
+        .arrow{
+            /* width: 100%; */
+            position: absolute;
+            display: grid;
+            place-items: center;
+            margin-top: 1rem;
+            padding: 0.2rem .5rem;
+            background-color: rgb(226, 226, 226);
+            color: rgb(0, 0, 0);
+            transform: rotate(0deg);
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+            bottom: -2rem;
+            cursor: pointer;
+
+            transition: 0.5s ease-in-out;
+
+           
+          
+        }
+        .arrow:hover{
+            background-color: rgb(51, 51, 51);
+            color: white;
+        }
+        .arrow.up{
+            transform: rotate(180deg);
+        }
+        .vectors{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 0.5rem  ;
+            padding: 0;
+            
+        }
+        .vectors p{
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .trails{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 0.5rem  ;
+            padding: 0;
+            margin-top: -1rem;
+        }
+        .trails p{
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .info{
+            margin: -1rem 0;
+            display: flex;
+
+        }
+        .info span{
+            height:10px;
+            width:10px;
+            border-radius: 50%;
+
+        }
+        .info1,.info2{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.4rem;
+            
+        }
+        .info p{
+            font-weight: 500;
+            margin-left: 1rem;
+        }
+        .info1 span{
+            height:10px;
+            width:10px;
+            border-radius: 50%;
+            background-color: white;
+
+            margin-left: 0.5rem;
+        }
+        .info2 span{
+            height:10px;
+            width:10px;
+            border-radius: 50%;
+            background-color: rgb(255, 0, 255);
+
+            margin-left:  0.5rem;
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+    <div class="controls">
+       <h3>Three body problem simulation</h3> 
+<div class="point">
+    P 1 : 
+    <input class="inp1" type="text" placeholder="X , Y , MASS">
+    <div class="clr clr1 "></div>
+</div>
+<div class="point">
+    P 2 : 
+    <input class="inp2" type="text"  placeholder="X , Y , MASS"></input>
+    <div class="clr clr2"></div>
+</div>
+<div class="point">
+    P 3 : 
+    <input class="inp3" type="text"  placeholder="X , Y , MASS">
+    <div class="clr clr3"></div>
+</div>
+
+<div class="run">
+    RUN SIMULATION
+</div>
+<div class="vectors">
+    <input class="vectorEnable"  type="checkbox" name="vector" id=""></input>
+    <p>Enable Vectors</p>
+</div>
+<div class="trails">
+    <input class="trail" type="checkbox" name="vector" id=""></input>
+    <p>Enable Trails</p>
+</div>
+<div class="info">
+   <div class="info1"><span> </span><p>Accn</p></div>
+   <div class="info2"><span> </span><p>Vel</p></div>
+</div>
+
+<div class="arrow">
+    V
+</div>
+
+    </div>
+
+<script src="./p5.min.js"></script>
+    
+<script src="./Object.js"></script>
+
+<script src="./script.js"></script>
+
+
+</body>
+</html>
